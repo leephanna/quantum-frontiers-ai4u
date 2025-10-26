@@ -9,7 +9,7 @@ token = os.getenv("IBM_QUANTUM_TOKEN") or os.getenv("IBM_QUANTUM_API_TOKEN")
 if not token:
     print(json.dumps({"ok": False, "error": "Missing IBM_QUANTUM_TOKEN"})); sys.exit(0)
 try:
-    svc = QiskitRuntimeService(channel="ibm_quantum", token=token, instance=os.getenv("IBM_QUANTUM_INSTANCE") or None)
+    svc = QiskitRuntimeService(channel="ibm_cloud", token=token, instance=os.getenv("IBM_QUANTUM_INSTANCE") or None)
     _ = svc.backends()
     print(json.dumps({"ok": True, "checked_at": datetime.utcnow().isoformat() + "Z"}))
 except Exception as e:
