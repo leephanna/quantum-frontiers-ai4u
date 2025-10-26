@@ -55,7 +55,7 @@ def main():
     project = os.getenv("IBM_QUANTUM_PROJECT") or None
     instance = "/".join([x for x in [hub, group, project] if x])
 
-    service = QiskitRuntimeService(channel="ibm_quantum", token=token, instance=instance if instance else None)
+    service = QiskitRuntimeService(channel="ibm_cloud", token=token, ...)
 
     qc = QuantumCircuit.from_qasm_str(qasm_str)
 
