@@ -16,6 +16,7 @@ jobs:
       - name: Verify token
         env:
           IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN || secrets.IBM_QUANTUM_API_TOKEN }}
+          IBM_QUANTUM_INSTANCE: ${{ secrets.IBM_QUANTUM_INSTANCE }}
         run: |
           python ops/verify_ibm_token.py > verify.json
           echo "RESULT<<EOF" >> $GITHUB_OUTPUT
