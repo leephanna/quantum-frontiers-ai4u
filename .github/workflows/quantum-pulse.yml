@@ -10,6 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Verify commit and code
+        run: |
+          echo "=== Current commit ==="
+          git rev-parse HEAD
+          git log -1 --oneline
+          echo ""
+          echo "=== Checking run_ibm.py line 58 ==="
+          sed -n '58p' services/quantum_runner/run_ibm.py
+          echo ""
+          echo "=== Searching for ibm_quantum channel ==="
+          grep -n 'channel="ibm_' services/quantum_runner/run_ibm.py || echo "No channel found"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,6 +39,7 @@ jobs:
       - name: Run Bell-state sampler
         env:
           IBM_QUANTUM_API_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN || secrets.IBM_QUANTUM_API_TOKEN }}
+          IBM_QUANTUM_INSTANCE: ${{ secrets.IBM_QUANTUM_INSTANCE }}
         run: |
           python services/quantum_runner/run_ibm.py --use-sampler --backend "${{ vars.IBM_DEVICE || 'ibmq_qasm_simulator' }}" --shots 1024 > pulse-result.json
           cat pulse-result.json
