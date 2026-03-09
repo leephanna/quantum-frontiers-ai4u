@@ -87,3 +87,22 @@ export const hardwareRuns = mysqlTable("hardwareRuns", {
 
 export type HardwareRun = typeof hardwareRuns.$inferSelect;
 export type InsertHardwareRun = typeof hardwareRuns.$inferInsert;
+
+/**
+ * News Articles table for AI News Aggregator
+ * Stores articles fetched from RSS feeds (MIT News, TechCrunch AI, AI Weekly)
+ * Unique constraint on `link` prevents duplicate articles on re-fetch.
+ * © 2025 AI4U, LLC. All Rights Reserved. AI4Utech.com, Lee Hanna-Owner.
+ */
+export const newsArticles = mysqlTable("newsArticles", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  title: text("title").notNull(),
+  link: varchar("link", { length: 2048 }).notNull().unique(),
+  description: text("description"),
+  source: varchar("source", { length: 128 }).notNull(), // e.g. "MIT News", "TechCrunch AI", "AI Weekly"
+  publishedAt: timestamp("publishedAt"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export type NewsArticle = typeof newsArticles.$inferSelect;
+export type InsertNewsArticle = typeof newsArticles.$inferInsert;

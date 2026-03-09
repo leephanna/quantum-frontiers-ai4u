@@ -1,4 +1,5 @@
 import { COOKIE_NAME } from "@shared/const";
+import { refreshNewsFeeds, getNewsArticleCount } from "./news";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
@@ -262,6 +263,30 @@ export const appRouter = router({
         return runCards.sort((a, b) => b.finalFitness - a.finalFitness);
       }),
   }),
+
+  /**
+   * AI News Aggregator router
+   * © 2025 AI4U, LLC. All Rights Reserved. AI4Utech.com, Lee Hanna-Owner.
+   */
+  news: router({
+    /**
+     * Refresh news articles from all RSS feeds.
+     * Protected: requires authenticated user.
+     * Returns { success, fetched, inserted, errors }
+     */
+    refresh: protectedProcedure.mutation(async () => {
+      return await refreshNewsFeeds();
+    }),
+
+    /**
+     * Get total count of stored news articles (public).
+     */
+    count: publicProcedure.query(async () => {
+      const count = await getNewsArticleCount();
+      return { count };
+    }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
+
